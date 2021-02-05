@@ -1,0 +1,86 @@
+#include <vector>
+#include <string>
+#include <map>
+#include <math.h>
+#include <iostream>
+using namespace std;
+
+vector<int> pol;
+vector<pair<int, int>> ans;
+map<pair<int, int>, int> fraccheck;
+
+const int limit = 100;
+
+int gcd(int a, int b)
+{
+	if (b == 0) return a;
+	else return gcd(b, a % b);
+}
+
+string toPoly(int n)
+{
+	string str;
+	int i;
+	for (i = 0; i <= n; i++)
+	{
+		if (pol[i] < 0) str += "-";
+		if (pol[i] > 0 && i != 0) str += "+";
+		else if (pol[i] == 0) continue;
+		str += to_string(pol[i]);
+		if (i != n) str += "x^" + to_string(n - i);
+	}
+	return str;
+}
+
+int main()
+{
+	int n;
+	cin >> n;
+	int i;
+	for (i = 0; i < n + 1; i++)
+	{
+		int tmp;
+		cin >> tmp;
+		pol.push_back(tmp);
+	}
+	int a, b;
+	for (a = -limit; a <= limit; a++) // a = 분자
+	{
+		for (b = -limit; b <= limit; b++)//b = 분모
+		{
+			if (a == 0 || b == 0) continue;
+			int GCD = gcd(a, b);
+			int A = a / GCD, B = b / GCD;
+			if (fraccheck[{A, B}] == 0)
+			{
+				pair<int, int> fx;
+				fx.first = 0;
+				fx.second = 0;
+				for (i = 0; i <= n; i++)
+				{
+					int numr = pol[i] * (int)pow((double)A, n - i)*(int)pow((double)B, i);
+					int denr = (int)pow((double)B, n);
+					fx.first += numr;
+					fx.second += denr;
+				}
+				if (fx.first == 0 && fx.second != 0)
+				{
+					ans.push_back({ A, B });
+				}
+				fraccheck[{A, B}] = 1;
+			}
+		}
+	}
+	if (ans.size() != pol.size() - 1)
+	{
+		//printf("ERROR");
+		//return 0;
+	}
+	for (i = 0; i < ans.size(); i++)
+	{
+		if (ans[i].first < 0) printf("(x+%d", -1 * ans[i].first);
+		else printf("(x%d", -1 * ans[i].first);
+		if (ans[i].second != 1) printf("/%d", ans[i].second);
+		printf(")");
+	}
+}
