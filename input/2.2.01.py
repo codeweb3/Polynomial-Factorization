@@ -1,5 +1,3 @@
-import numpy as np
-
 poly = [ ]
 ansrange = 100
 charlist = [ ]
@@ -38,10 +36,3 @@ while i < inlen:
 			ncounting = False
 	i += 1
 print(poly)
-
-#for i in range(-ansrange, ansrange):
-#	if evaluate(i) == 0:
-#		printf("(x")
-#		if(i < 0) print(" + " + -1 * x + ")")
-#		elif (i > 0) print(" - " + -1 * x + ")")
-#		else print(")")
